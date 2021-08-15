@@ -42,3 +42,36 @@ router.get("/api/workouts", (req, res) => {
       res.json(err);
     });
 });
+// used to display the distace from the workouts
+router.get("/api/workouts/range", (req, res) => {
+  Workout.aggregate([
+    {
+      $addFields: {
+        totalDuration: {
+          $sum: "$exercises.duration",
+        },
+      },
+    },
+  ])
+    .sort({ _id: -1 })
+    .limit(7)
+    .then((dbWorkouts) => {
+      console.log(dbWorkouts);
+      res.json(dbWorkouts);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+// this will be able to delete a workout
+router.delete("/api/workouts", ({ body }, res) => {
+  Workout.findByIdAndDelete(body.id)
+    .then(() => {
+      res.json(true);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+module.exports = router;
