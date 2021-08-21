@@ -28,6 +28,7 @@ router.put("/api/workouts/:id", ({ body, params }, res) => {
 });
 //display the workouts
 router.get("/api/workouts", (req, res) => {
+  console.log("get workouts");
   Workout.aggregate([
     {
       $addFields: {
